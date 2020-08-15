@@ -1,0 +1,99 @@
+.terminal {
+    width: 700px;
+    color: #fff;
+    font-family: 'Ubuntu-Medium';
+}
+
+.terminal__menu {
+    background-color: #3c3b37;
+    height: 40px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    display: flex;
+}
+
+.terminal__menu-name {
+    font-size: 1.2rem;
+}
+
+.terminal__menu-buttons {
+    display: flex;
+    list-style: none;
+    margin-left: auto;
+    text-align: center;
+    align-self: center;
+}
+
+.terminal__menu-buttons-img {
+    width: 18px;
+    height: 18px;
+}
+
+.terminal__menu-buttons-img {
+    padding: 0.27rem;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.terminal__menu-buttons-item {
+    margin-right: 0.6rem;
+}
+
+.terminal__menu-buttons-img {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.terminal__menu-rectangle-button:hover, .terminal__menu-minus-button:hover {
+    background-color: rgb(88, 88, 88);
+}
+
+.terminal__menu-x-button {
+    background-color: rgb(195, 83, 83);
+    transition: all 0.2s;
+}
+
+.terminal__menu-x-button:hover {
+    background-color: rgb(209, 87, 87);
+}
+
+.terminal__menu-name {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    align-self: center;
+}
+
+.terminal__content {
+    background-color: rgba(56, 4, 40, .9);
+    height: 500px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.terminal__content-form {
+    display: flex;
+    padding: 0 5px;
+}
+
+.terminal__content-label {
+    /*color: rgb(0, 168, 0)*/
+    font-size: 1.35rem;
+    color: rgb(138, 226, 51)
+}
+
+.terminal__content-tilde {
+    color: rgb(101, 143, 198)
+}
+
+.terminal__content-input {
+    font-family: 'Ubuntu-Regular';
+    padding: 0;
+    color: #fff;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    width: 100%;
+    font-size: 1.35rem;
+}
