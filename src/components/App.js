@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Terminal from './Terminal/Terminal';
-import './App.css'
+import './App.css';
 
 export default class App extends Component {
     render() {

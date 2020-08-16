@@ -13,7 +13,7 @@
 }
 
 .terminal__menu-name {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .terminal__menu-buttons {
@@ -25,8 +25,8 @@
 }
 
 .terminal__menu-buttons-img {
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
 }
 
 .terminal__menu-buttons-img {
@@ -36,7 +36,7 @@
 }
 
 .terminal__menu-buttons-item {
-    margin-right: 0.6rem;
+    margin-right: 0.7rem;
 }
 
 .terminal__menu-buttons-img {
@@ -50,12 +50,12 @@
 }
 
 .terminal__menu-x-button {
-    background-color: rgb(195, 83, 83);
+    background-color: rgb(182, 54, 54);
     transition: all 0.2s;
 }
 
 .terminal__menu-x-button:hover {
-    background-color: rgb(209, 87, 87);
+    background-color: rgb(211, 79, 79);
 }
 
 .terminal__menu-name {
@@ -70,17 +70,27 @@
     height: 500px;
     border-bottom-right-radius: 2px;
     border-bottom-left-radius: 2px;
+    overflow-y: scroll;
+    padding: 2px;
+}
+
+.terminal__content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.terminal__content::-webkit-scrollbar {
+    background-color: transparent;
+}
+
+.terminal__content::-webkit-scrollbar-thumb {
+    background-color: rgb(173, 173, 173);
+    border-radius: 3px;
 }
 
 .terminal__content-form {
     display: flex;
-    padding: 0 5px;
-}
-
-.terminal__content-label {
-    /*color: rgb(0, 168, 0)*/
-    font-size: 1.35rem;
-    color: rgb(138, 226, 51)
+    font-size: 1.25rem;
+    color: rgb(138, 226, 51);
 }
 
 .terminal__content-tilde {
@@ -95,5 +105,12 @@
     outline: none;
     border: none;
     width: 100%;
-    font-size: 1.35rem;
+    font-size: 1.25rem;
+}
+
+.terminal__content-output {
+    color: #fff;
+    font-size: 1.25rem;
+    padding: 2px 0;
+    font-family: 'Ubuntu-Regular';
 }
