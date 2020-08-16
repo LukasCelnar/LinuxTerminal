@@ -1,28 +1,51 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { changeInputValue, updateContentHistory } from '../../actions';
+import './TerminalContent.css'
 
-export default class TerminalContent extends Component {
+class TerminalContent extends Component {
+
+    onFormSubmit = (e) => {
+        e.preventDefault()
+        /*
+        if (this.state.inputValue.split(" ").length === 2 && this.state.inputValue.split(" ")[0] === "mkdir") {
+            console.log("you are trying to create dir with name " + this.state.inputValue.split(" ")[1]);
+        };
+        */
+        this.props.updateContentHistory(this.props.inputValue, `you have entered: "${this.props.inputValue}"`)
+        this.props.changeInputValue('')
+    };
 
     renderInput() {
-        if (this.props.onInputChange) {
-            return <input value={this.props.inputValue} onChange={(e) => this.props.onInputChange(e)} className="terminal__content-input" />
+        if (!this.props.content) {
+            return <input value={this.props.inputValue} onChange={(e) => this.props.changeInputValue(e.target.value)} className="terminal__content-input" />
         }
-        return <input value={this.props.inputValue} readOnly className="terminal__content-input" />
+
+        return <input value={this.props.content.input} readOnly className="terminal__content-input" />
     }
 
     render() {
 
+        const name = "name@ubuntu"
+
         return (
-            <form onSubmit={(e) => this.props.onFormSubmit(e)} className="terminal__content-form">
-                <div style={{width: '100%'}}>
-                    <div className="" style={{display: 'flex', width: '100%'}}>
+            <form onSubmit={(e) => this.onFormSubmit(e)} className="terminal__content-form">
+                <div className="terminal__content-container">
+                    <div className="terminal__content-input-container">
                         <label className="terminal__content-label">
-                            <span className="terminal__content-name">{this.props.name}</span>:<span className="terminal__content-tilde">~</span>$&nbsp;&nbsp;
+                            <span className="terminal__content-name">{name}</span>:<span className="terminal__content-tilde">~</span>$&nbsp;&nbsp;
                         </label>
                         {this.renderInput()}
                     </div>
-                    {this.props.output ? <div className="terminal__content-output">{this.props.output}</div> : null}
+                    {this.props.content ? <div className="terminal__content-output">{this.props.content.output}</div> : null}
                 </div>
             </form>
         );
     }
 }
+
+const mapStateToProps = state => {
+    return { inputValue: state.inputValue }
+}
+
+export default connect(mapStateToProps, { changeInputValue, updateContentHistory })(TerminalContent)

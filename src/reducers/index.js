@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import EDIT_ME_REDUCER from './EDIT_ME_REDUCER'
+import inputValueReducer from './inputValueReducer';
+import contentHistoryReducer from './contentHistoryReducer';
 
 export default combineReducers({
-    EDIT_ME_REDUCER
-})
+    inputValue: inputValueReducer,
+    contentHistory: contentHistoryReducer
+});

@@ -86,31 +86,3 @@
     background-color: rgb(173, 173, 173);
     border-radius: 3px;
 }
-
-.terminal__content-form {
-    display: flex;
-    font-size: 1.25rem;
-    color: rgb(138, 226, 51);
-}
-
-.terminal__content-tilde {
-    color: rgb(101, 143, 198)
-}
-
-.terminal__content-input {
-    font-family: 'Ubuntu-Regular';
-    padding: 0;
-    color: #fff;
-    background-color: transparent;
-    outline: none;
-    border: none;
-    width: 100%;
-    font-size: 1.25rem;
-}
-
-.terminal__content-output {
-    color: #fff;
-    font-size: 1.25rem;
-    padding: 2px 0;
-    font-family: 'Ubuntu-Regular';
-}

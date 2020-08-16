@@ -1,54 +1,18 @@
 import React, { Component } from 'react';
 import TerminalContent from '../TerminalContent/TerminalContent';
+import { connect } from 'react-redux';
+import { changeInputValue, updateContentHistory } from '../../actions';
 import './Terminal.css';
 
-export default class Terminal extends Component {
-    state = { 
-        inputValue: '',
-        terminalContent: [
-            { input: 'ls', output: 'dir1 file1 dir2' },
-            { input: 'mkdir car', output: 'dir1 file1 dir2 car dir1 file1 dir2 car dir1 file1 dir2 car dir1 file1 dir2 car dir1 file1 dir2 car' }
-        ]
-    };
-
-    componentDidUpdate() {
-        // I want to die
-        // WTF NOW
-        console.log(this.state)
-
-    }
+class Terminal extends Component {
 
     renderContent() {
-        return this.state.terminalContent.map((content, index) => {
-            console.log("rendering")
-            return (
-                <TerminalContent 
-                    key={index}
-                    onFormSubmit={this.onFormSubmit} 
-                    name="name@ubuntu"
-                    inputValue={content.input}
-                    output={content.output}
-                />
-            )
-        })
-    }
-
-    onInputChange = (e) => {
-        this.setState({ inputValue: e.target.value })
-    }
-
-    onFormSubmit = (e) => {
-        e.preventDefault()
-        console.log(this.state.inputValue)
-        /*
-        if (this.state.inputValue.split(" ").length === 2 && this.state.inputValue.split(" ")[0] === "mkdir") {
-            console.log("you are trying to create dir with name " + this.state.inputValue.split(" ")[1]);
-        };
-        */
-       
-        this.setState({ terminalContent: [...this.state.terminalContent, { input: this.state.inputValue, output: `You have entered: "${this.state.inputValue}"`}],   })
-        this.setState({ inputValue: '' })
+        return this.props.contentHistory.map((content, index) => {
+            // console.log("mapping")
+            return <TerminalContent key={index} content={content} />
+        });
     };
+    
 
     render() {
         return (
@@ -63,14 +27,17 @@ export default class Terminal extends Component {
                 </div>
                 <div className="terminal__content">
                     {this.renderContent()}
-                    <TerminalContent 
-                        onFormSubmit={this.onFormSubmit} 
-                        name="name@ubuntu"
-                        inputValue={this.state.inputValue}
-                        onInputChange={this.onInputChange}
-                    />
+                    <TerminalContent onFormSubmit={this.onFormSubmit} />
                 </div>
             </div>
         );
     };
 };
+
+const mapStateToProps = state => {
+    return {
+        contentHistory: state.contentHistory
+    }
+}
+
+export default connect(mapStateToProps, { changeInputValue, updateContentHistory })(Terminal)
