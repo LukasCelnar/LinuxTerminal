@@ -6,24 +6,25 @@ export default (inputValue) => {
 
     return (dispatch, getState) => {
 
-        //const throwError = () => dispatch(updateContentHistory(inputValue, `${inputValue}: command not found`));
+        const throwError = () => dispatch(updateContentHistory(inputValue, `${inputValue}: command not found`));
+        const doNothing = () => dispatch(updateContentHistory(inputValue, null));
         
         switch (values[0]) {
             case 'mkdir':
                 if (values.length === 2) {
                     dispatch(createFile(values[1], 'directory', 'rgb(121, 199, 248)'));
-                    dispatch(updateContentHistory(inputValue, null));
+                    doNothing()
                     break
                 };
-                dispatch(updateContentHistory(inputValue, `${inputValue}: command not found`));
+                throwError()
                 break;
             case 'touch':
                 if (values.length === 2) {
                     dispatch(createFile(values[1], 'file', '#fff'));
-                    dispatch(updateContentHistory(inputValue, null));
+                    doNothing()
                     break
                 };
-                dispatch(updateContentHistory(inputValue, `${inputValue}: command not found`));
+                throwError()
                 break;
             case 'ls':
                 if (values.length === 1) {
@@ -33,10 +34,14 @@ export default (inputValue) => {
                     dispatch(updateContentHistory(inputValue, files));
                     break
                 };
-                dispatch(updateContentHistory(inputValue, `${inputValue}: command not found`));
+                throwError()
                 break
             default:
-                dispatch(updateContentHistory(inputValue, `${inputValue}: command not found`));
+                if (!inputValue) {
+                    doNothing()
+                    break
+                }
+                throwError()
         };
     };
 };
