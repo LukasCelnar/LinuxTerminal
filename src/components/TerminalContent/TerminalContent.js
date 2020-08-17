@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { changeInputValue, updateContentHistory, enterCommand } from '../../actions';
+import { changeInputValue, updateContentHistory} from '../../actions';
+import submitCommand from './submitCommand';
 import './TerminalContent.css'
 
 class TerminalContent extends Component {
@@ -12,7 +13,7 @@ class TerminalContent extends Component {
                 console.log("you are trying to create dir with name " + this.state.inputValue.split(" ")[1]);
             };
         */
-        this.props.enterCommand(this.props.inputValue);
+        this.props.submitCommand(this.props.inputValue)
         this.props.updateContentHistory(this.props.inputValue, `you have entered: "${this.props.inputValue}"`);
         this.props.changeInputValue('');
     };
@@ -49,4 +50,4 @@ const mapStateToProps = state => {
     return { inputValue: state.inputValue }
 }
 
-export default connect(mapStateToProps, { changeInputValue, updateContentHistory, enterCommand })(TerminalContent)
+export default connect(mapStateToProps, { changeInputValue, updateContentHistory, submitCommand})(TerminalContent)

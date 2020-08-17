@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 import inputValueReducer from './inputValueReducer';
 import contentHistoryReducer from './contentHistoryReducer';
-import enterCommandReducer from './enterCommandReducer'
+import filesReducer from './filesReducer'
 
 export default combineReducers({
     inputValue: inputValueReducer,
     contentHistory: contentHistoryReducer,
-    // disk represents all the files and directories
-    disk: enterCommandReducer
+    // files represents all the files and directories
+    files: filesReducer
 });

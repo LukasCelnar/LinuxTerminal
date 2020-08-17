@@ -6,7 +6,6 @@ export const changeInputValue = (value) => {
     };
 };
 
-//
 export const updateContentHistory = (input, output) => {
     return {
         type: 'UPDATE_CONTENT_HISTORY',
@@ -14,10 +13,10 @@ export const updateContentHistory = (input, output) => {
     };
 };
 
-// commands
-export const enterCommand = (command) => {
+// files = directories/files
+export const createFile = (name, type, color) => {
     return {
-        type: 'ENTER_COMMAND',
-        payload: command
+        type: 'CREATE_FILE',
+        payload: { name, type, color }
     };
 };
