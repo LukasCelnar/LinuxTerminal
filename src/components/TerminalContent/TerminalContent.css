@@ -29,6 +29,8 @@
 }
 
 .terminal__content-output {
+    display: flex;
+    flex-wrap: wrap;
     color: #fff;
     font-size: 1.25rem;
     padding: 2px 0;

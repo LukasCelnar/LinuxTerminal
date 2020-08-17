@@ -8,13 +8,8 @@ class TerminalContent extends Component {
 
     onFormSubmit = (e) => {
         e.preventDefault()
-        /*
-            if (this.state.inputValue.split(" ").length === 2 && this.state.inputValue.split(" ")[0] === "mkdir") {
-                console.log("you are trying to create dir with name " + this.state.inputValue.split(" ")[1]);
-            };
-        */
+
         this.props.submitCommand(this.props.inputValue)
-        this.props.updateContentHistory(this.props.inputValue, `you have entered: "${this.props.inputValue}"`);
         this.props.changeInputValue('');
     };
 
@@ -39,11 +34,19 @@ class TerminalContent extends Component {
                         </label>
                         {this.renderInput()}
                     </div>
-                    {this.props.content ? <div className="terminal__content-output">{this.props.content.output}</div> : null}
+                    {
+                    this.props.content ? 
+                    (
+                        <div className="terminal__content-output">
+                            {this.props.content.output}
+                        </div>
+                    )
+                    : null
+                    }
                 </div>
             </form>
         );
-    }
+    };
 }
 
 const mapStateToProps = state => {

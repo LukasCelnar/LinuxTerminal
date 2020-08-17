@@ -25,6 +25,7 @@ class Terminal extends Component {
                         <li className="terminal__menu-buttons-item"><img className="terminal__menu-buttons-img terminal__menu-x-button" alt="" src="images/x.png" /></li>
                     </ul>
                 </div>
+                
                 <div className="terminal__content">
                     {this.renderContent()}
                     <TerminalContent onFormSubmit={this.onFormSubmit} />
