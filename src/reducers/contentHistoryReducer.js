@@ -1,6 +1,5 @@
 /*
 
-content history state design
 [
     {
         input: '',
