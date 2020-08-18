@@ -14,9 +14,16 @@ export const updateContentHistory = (input, output) => {
 };
 
 // files = directories/files
-export const createFile = (name, type, color) => {
+export const createFile = (name, path, type, color) => {
     return {
         type: 'CREATE_FILE',
-        payload: { name, type, color }
+        payload: { name, type, color, path }
     };
 };
+
+export const changeFilePath = (path) => {
+    return {
+        type: 'CHANGE_FILE_PATH',
+        payload: path
+    }
+}

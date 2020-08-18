@@ -17,3 +17,7 @@
     font-family: 'Ubuntu-Regular';
     src: local('Ubuntu-Regular'), url(../fonts/Ubuntu-Regular.ttf) format('truetype');
 }
+
+body {
+    background-image: url('/images/ubuntu-background.jpg');
+}
