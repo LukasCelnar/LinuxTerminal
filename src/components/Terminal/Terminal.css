@@ -2,6 +2,7 @@
     width: 700px;
     color: #fff;
     font-family: 'Ubuntu-Medium';
+    box-shadow: 0 1rem 2rem rgba(0,0,0, 0.2);
 }
 
 .terminal__menu {

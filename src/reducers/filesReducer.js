@@ -1,3 +1,4 @@
+import _ from 'lodash';
 /*
 
 [
@@ -30,6 +31,8 @@ export default (state = defaultFiles, action) => {
     switch(action.type) {
         case 'CREATE_FILE':
             return [ ...state, action.payload ];
+        case 'REMOVE_FILE':
+            return _.reject(state, action.payload);
         default:
             return state;
     };

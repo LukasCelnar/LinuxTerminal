@@ -1,6 +1,12 @@
 import React from 'react';
 import _ from 'lodash'
-import { updateContentHistory, createFile, changeFilePath } from '../../actions';
+import { 
+    updateContentHistory, 
+    createFile, 
+    changeFilePath, 
+    clearContentHistory,
+    removeFile 
+} from '../../actions';
 
 export default (inputValue) => {
     const values = inputValue.split(" ");
@@ -16,22 +22,22 @@ export default (inputValue) => {
             case 'mkdir':
                 if (values.length === 2 && values[1]) {
 
+                    // checks if this directory already exists
                     if (!_.find(getState().files, { name: values[1], type: 'directory', path: getState().filePath })) {
                         dispatch(createFile(values[1], getState().filePath, 'directory', 'rgb(121, 199, 248)'));
                         doNothing();
                         break;
                     }
                     
-                    //
                     showOutput('directory with this name already exists')
                     break
-                    //
                 };
                 throwError();
                 break;
             case 'touch':
                 if (values.length === 2 && values[1]) {
 
+                    // checks if this file already exists
                     if (!_.find(getState().files, { name: values[1], type: 'file', path: getState().filePath })) {
                         dispatch(createFile(values[1], getState().filePath, 'file', '#fff'));
                         doNothing();
@@ -40,15 +46,14 @@ export default (inputValue) => {
 
                     showOutput('file with this name already exists')
                     break
-                    //
                 };
                 throwError()
                 break;
             case 'ls':
                 if (values.length === 1) {
+
                     // loop through all the existing files and return those that are in this directory path
                     const files = getState().files.map((file, index) => {
-
                         if (file.path === getState().filePath) {
                             return <div key={index} style={{color: file.color}}>{file.name}&nbsp;&nbsp;&nbsp;&nbsp;</div>;
                         }
@@ -76,6 +81,7 @@ export default (inputValue) => {
                             doNothing();
                             break
                         }
+                        // else it will remove last route and then join rest with '/'
                         dispatch(changeFilePath(getState().filePath.split('/').slice(0, -1).join('/')));
                         doNothing();
                         break
@@ -88,53 +94,60 @@ export default (inputValue) => {
 
                     // check if there is '/' in second argument
                     if (values[1].includes('/')) {
-                        throwError()
-                        break
+                        throwError();
+                        break;
                     }
 
-                    
-                    // loops through every file and checks if the name of the file is same as given name
-                    // also it checks if the file path of that file is same as current filepath and
-                    // if the type of that file is 'directory' and not 'file' if all these return true
-                    // it will set dirExists to true and then continue to the directory
-                    let dirExists = false
-                    for (let i = 0; i < getState().files.length; i++) {
-                        const file = getState().files[i]
-                        if (file.name === values[1] && file.path === getState().filePath && file.type === 'directory') {
-                            dirExists = true
-                            break
-                        }
+                    // checks if this directory with this name, current filepath and type of 'directory' exists if so, this returns true
+                    const dirExists = Boolean(_.find(getState().files, { name: values[1], type: 'directory', path: getState().filePath }))
+
+                    // if entered directory doesnt exists, it will throw an error
+                    if (!dirExists) {
+                        showOutput('directory doesnt exist');
+                        break;
                     }
 
                     // triggers when you are in root dir and you want to cd to something
                     if (getState().filePath === '/') {
 
-                        // if directory exists, it will continue to that directory
-                        if (dirExists) {
-                            // change current path to '/' + second argument
-                            dispatch(changeFilePath(`/${values[1]}`))
-                            doNothing()
-                            break
-                        }
-
-                        // runs this code if directory doesnt exist
-                        showOutput('directory doesnt exist')
-                        break
+                        // change current path to '/' + second argument
+                        dispatch(changeFilePath(`/${values[1]}`));
+                        doNothing();
+                        break;
                     }
 
-                    // if directory exists, it will continue to that directory
-                    if (dirExists) {
-                        // change current path to current path + '/' + second argument
-                        dispatch(changeFilePath(`${getState().filePath}/${values[1]}`))
-                        doNothing()
-                        break
-                    }
-
-                    // runs this code if directory doesnt exist
-                    showOutput('directory doesnt exist')
-                    break
+                    // change current path to current path + '/' + second argument
+                    dispatch(changeFilePath(`${getState().filePath}/${values[1]}`));
+                    doNothing();
+                    break;
                 }
                 throwError()
+                break
+            case 'clear':
+                if (values.length === 1) {
+                    dispatch(clearContentHistory());
+                    break;
+                }
+                throwError()
+                break
+            case 'rmdir':
+                const getFile = name => _.find(getState().files, { name: name, type: 'directory', path: getState().filePath })
+
+                const idk = values.map((value, index) => {
+                    if (value === 'rmdir') {
+                        return null
+                    }
+                    if (getFile(value)) {
+                        dispatch(removeFile(getFile(value)))
+                        return null
+                        
+                    }
+                    return <React.Fragment key={index}><div>rmdir: failed to remove '{value}' no such file or directory`</div><br /></React.Fragment>
+                    
+                })
+
+                showOutput(idk)
+
                 break
             default:
                 // check if user entered white space/s

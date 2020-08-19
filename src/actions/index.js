@@ -13,11 +13,24 @@ export const updateContentHistory = (input, output) => {
     };
 };
 
+export const clearContentHistory = () => {
+    return {
+        type: 'CLEAR_CONTENT_HISTORY'
+    }
+}
+
 // files = directories/files
 export const createFile = (name, path, type, color) => {
     return {
         type: 'CREATE_FILE',
         payload: { name, type, color, path }
+    };
+};
+
+export const removeFile = (file) => {
+    return {
+        type: 'REMOVE_FILE',
+        payload: file
     };
 };
 
