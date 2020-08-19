@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash'
 import { updateContentHistory, createFile, changeFilePath } from '../../actions';
 
 export default (inputValue) => {
@@ -14,17 +15,32 @@ export default (inputValue) => {
         switch (values[0]) {
             case 'mkdir':
                 if (values.length === 2 && values[1]) {
-                    dispatch(createFile(values[1], getState().filePath, 'directory', 'rgb(121, 199, 248)'));
-                    doNothing();
-                    break;
+
+                    if (!_.find(getState().files, { name: values[1], type: 'directory', path: getState().filePath })) {
+                        dispatch(createFile(values[1], getState().filePath, 'directory', 'rgb(121, 199, 248)'));
+                        doNothing();
+                        break;
+                    }
+                    
+                    //
+                    showOutput('directory with this name already exists')
+                    break
+                    //
                 };
                 throwError();
                 break;
             case 'touch':
                 if (values.length === 2 && values[1]) {
-                    dispatch(createFile(values[1], getState().filePath, 'file', '#fff'));
-                    doNothing();
-                    break;
+
+                    if (!_.find(getState().files, { name: values[1], type: 'file', path: getState().filePath })) {
+                        dispatch(createFile(values[1], getState().filePath, 'file', '#fff'));
+                        doNothing();
+                        break;
+                    }
+
+                    showOutput('file with this name already exists')
+                    break
+                    //
                 };
                 throwError()
                 break;
@@ -130,4 +146,3 @@ export default (inputValue) => {
         };
     };
 };
-
