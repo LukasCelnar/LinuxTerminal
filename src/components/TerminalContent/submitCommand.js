@@ -137,8 +137,20 @@ export default (inputValue) => {
                     if (value === 'rmdir') {
                         return null
                     }
-                    if (getFile(value)) {
-                        dispatch(removeFile(getFile(value)))
+
+                    const currentFile = getFile(value)
+
+                    if (currentFile) {
+
+                        dispatch(removeFile(currentFile))
+
+                        getState().files.map(file => {
+                            if ((file.path.includes(`${currentFile.path}/${value}`)) || (getState().filePath === '/' && file.path.includes(`/${value}`))) {
+                                dispatch(removeFile(file))
+                            }
+                            return null
+                        })
+
                         return null
                         
                     }
