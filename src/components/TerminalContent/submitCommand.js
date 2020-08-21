@@ -20,19 +20,20 @@ export default (inputValue) => {
 
         const getDir = name => _.find(getState().files, { name: name, type: 'directory', path: getState().filePath });
         const getFile = name => _.find(getState().files, { name: name, type: 'file', path: getState().filePath });
+        const getDirFile = name => _.find(getState().files, { name: name, path: getState().filePath });
         
         switch (values[0]) {
             case 'mkdir':
                 if (values.length === 2 && values[1]) {
 
-                    // checks if this directory already exists
-                    if (!_.find(getState().files, { name: values[1], type: 'directory', path: getState().filePath })) {
+                    // checks if this file/directory already exists
+                    if (!getFile(values[1]) && !getDir(values[1])) {
                         dispatch(createFile(values[1], getState().filePath, 'directory', 'rgb(121, 199, 248)'));
                         doNothing();
                         break;
                     }
                     
-                    showOutput('directory with this name already exists')
+                    showOutput(`cannot create directory '${values[1]}': file/directory with this name already exists`)
                     break
                 };
                 throwError();
@@ -41,13 +42,14 @@ export default (inputValue) => {
                 if (values.length === 2 && values[1]) {
 
                     // checks if this file already exists
-                    if (!_.find(getState().files, { name: values[1], type: 'file', path: getState().filePath })) {
+                    if (!getFile(values[1]) && !getDir(values[1])) {
                         dispatch(createFile(values[1], getState().filePath, 'file', '#fff'));
                         doNothing();
                         break;
                     }
 
-                    showOutput('file with this name already exists')
+                    // this error isnt shown in ubuntu
+                    showOutput(`cannot create file '${values[1]}': file/directory with this name already exists`)
                     break
                 };
                 throwError()
@@ -135,73 +137,126 @@ export default (inputValue) => {
                 break
             case 'rmdir':
 
+                // maps through all inputed values
                 const rmdirOutput = values.map((value, index) => {
+                    // ignores 'rmdir' value
                     if (value === 'rmdir') { return null }
 
+                    // gets directory by name
                     const currentDir = getDir(value)
 
+                    // true if getDir returned something which means that dir exists
                     if (currentDir) {
 
+                        // isEmpty is true if direcotry is empty and false if it is not
                         let isEmpty = true
 
+                        // loops through every file that exists
                         getState().files.map(file => {
+                            // checks if file contains path to directory that we are trying to delete
                             if ((file.path.includes(`${currentDir.path}/${value}`)) || (getState().filePath === '/' && file.path.includes(`/${value}`))) {
                                 isEmpty = false
                             }
                             return null
                         })
 
+                        // is directory is empty its gonna delete that directory
                         if (isEmpty) {
                             dispatch(removeFile(currentDir))
                             return null
                         }
                         
-                        return <React.Fragment key={index}><div>failed to remove '{value}', directory isnt empty</div><br /></React.Fragment>
-
-                        /*
-                        getState().files.map(file => {
-                            if ((file.path.includes(`${currentDir.path}/${value}`)) || (getState().filePath === '/' && file.path.includes(`/${value}`))) {
-                                dispatch(removeFile(file))
-                            }
-                            return null
-                        })
-                        */
-                        
+                        // else its gonna return error that directory isnt empty
+                        return <React.Fragment key={index}><div>failed to remove '{value}', directory isnt empty</div><br /></React.Fragment>                        
                     }
+
+                    // else its gonna return error that directory doesnt exists
                     return <React.Fragment key={index}><div>rmdir: failed to remove '{value}' no such directory`</div><br /></React.Fragment>
                 })
 
+                // outputs returned items
                 showOutput(rmdirOutput)
                 break
 
             //    
             case 'rm':
+
+                // true if second value has -r in it
+                if (values[1] === '-r') {
+
+                    // maps through all inputed values
+                    const rmrOutput = values.map((value, index) => {
+                        // ignores 'rm' and '-r' values
+                        if (value === 'rm' || value === '-r') { return null };
+    
+                        // gets dir/file by its name
+                        const currentDirFile = getDirFile(value);
+    
+                        // true if getDirFile returned something which means that dir exists
+                        if (currentDirFile) {
+
+                            // removes that file/dir no matter if its empty or not
+                            dispatch(removeFile(currentDirFile));
+                            
+                            // maps through every file that exists
+                            getState().files.map(file => {
+                                // checks if file contains path to the directory that we are trying to delete
+                                // if so, it is gonna delete that file
+                                // basicly this deletes all the files/dirs in the deleted directory
+                                if ((file.path.includes(`${currentDirFile.path}/${value}`)) || (getState().filePath === '/' && file.path.includes(`/${value}`))) {
+                                    dispatch(removeFile(file));
+                                };
+                                return null;
+                            });
+                            return null;
+                        };
+                        // if getDirFile returns undefined (file/dir doesnt exist), its gonna ouput error that this file or directory doesnt exists
+                        return <React.Fragment key={index}><div>rm: failed to remove '{value}' no such file or directory`</div><br /></React.Fragment>;
+                    });
+    
+                    // outputs returned items
+                    showOutput(rmrOutput);
+                    break;
+                };
+
+                // maps through all inputed values
                 const rmOutput = values.map((value, index) => {
-                    if (value === 'rm') { return null }
+                    // ignores 'rm' value
+                    if (value === 'rm') { return null };
 
-                    const currentFile = getFile(value)
+                    // gets file by its name
+                    const currentFile = getFile(value);
 
+                    // true if currentFile contains object and not undefined
                     if (currentFile) {
-                        dispatch(removeFile(currentFile))
-                        return null
+                        dispatch(removeFile(currentFile));
+                        return null;
                     }
-                    return <React.Fragment key={index}><div>rm: failed to remove '{value}' no such file`</div><br /></React.Fragment>
-                })
 
+                    // else it outputs error that file doesnt exist
+                    return <React.Fragment key={index}><div>rm: failed to remove '{value}' no such file`</div><br /></React.Fragment>;
+                });
+
+                // outputs returned items
                 showOutput(rmOutput)
                 break
-            case 'unlink':                
+            case 'unlink':       
                 if (values.length === 2) {
-                    if(getFile(values[1])) {
-                        dispatch(removeFile(getFile(values[1])))
-                        doNothing()
-                        break
-                    }
-                    showOutput('this file doesnt exist')
-                    break
-                }
-                showOutput('you can only delete one file')
-                break
+                    // true if getFile retuned object and not undefined
+                    if (getFile(values[1])) {
+                        // removes that file
+                        dispatch(removeFile(getFile(values[1])));
+                        // doesnt show any output
+                        doNothing();
+                        break;
+                    };
+                    // else outputs that file doesnt exists
+                    showOutput('this file doesnt exist');
+                    break;
+                };
+                // outputs that user is trying to delete more then one file which he cant with 'unlink'
+                showOutput('you can only delete one file');
+                break;
             default:
                 // check if user entered white space/s
                 if (!valuesWithoutSpaces.length) {
