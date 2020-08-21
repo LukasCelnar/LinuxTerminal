@@ -17,6 +17,9 @@ export default (inputValue) => {
         const throwError = () => dispatch(updateContentHistory(inputValue, `${inputValue}: command not found`));
         const doNothing = () => dispatch(updateContentHistory(inputValue, null));
         const showOutput = (output) => dispatch(updateContentHistory(inputValue, output));
+
+        const getDir = name => _.find(getState().files, { name: name, type: 'directory', path: getState().filePath });
+        const getFile = name => _.find(getState().files, { name: name, type: 'file', path: getState().filePath });
         
         switch (values[0]) {
             case 'mkdir':
@@ -131,35 +134,73 @@ export default (inputValue) => {
                 throwError()
                 break
             case 'rmdir':
-                const getFile = name => _.find(getState().files, { name: name, type: 'directory', path: getState().filePath })
 
-                const idk = values.map((value, index) => {
-                    if (value === 'rmdir') {
-                        return null
-                    }
+                const rmdirOutput = values.map((value, index) => {
+                    if (value === 'rmdir') { return null }
 
-                    const currentFile = getFile(value)
+                    const currentDir = getDir(value)
 
-                    if (currentFile) {
+                    if (currentDir) {
 
-                        dispatch(removeFile(currentFile))
+                        let isEmpty = true
 
                         getState().files.map(file => {
-                            if ((file.path.includes(`${currentFile.path}/${value}`)) || (getState().filePath === '/' && file.path.includes(`/${value}`))) {
-                                dispatch(removeFile(file))
+                            if ((file.path.includes(`${currentDir.path}/${value}`)) || (getState().filePath === '/' && file.path.includes(`/${value}`))) {
+                                isEmpty = false
                             }
                             return null
                         })
 
-                        return null
+                        if (isEmpty) {
+                            dispatch(removeFile(currentDir))
+                            return null
+                        }
+                        
+                        return <React.Fragment key={index}><div>failed to remove '{value}', directory isnt empty</div><br /></React.Fragment>
+
+                        /*
+                        getState().files.map(file => {
+                            if ((file.path.includes(`${currentDir.path}/${value}`)) || (getState().filePath === '/' && file.path.includes(`/${value}`))) {
+                                dispatch(removeFile(file))
+                            }
+                            return null
+                        })
+                        */
                         
                     }
-                    return <React.Fragment key={index}><div>rmdir: failed to remove '{value}' no such file or directory`</div><br /></React.Fragment>
-                    
+                    return <React.Fragment key={index}><div>rmdir: failed to remove '{value}' no such directory`</div><br /></React.Fragment>
                 })
 
-                showOutput(idk)
+                showOutput(rmdirOutput)
+                break
 
+            //    
+            case 'rm':
+                const rmOutput = values.map((value, index) => {
+                    if (value === 'rm') { return null }
+
+                    const currentFile = getFile(value)
+
+                    if (currentFile) {
+                        dispatch(removeFile(currentFile))
+                        return null
+                    }
+                    return <React.Fragment key={index}><div>rm: failed to remove '{value}' no such file`</div><br /></React.Fragment>
+                })
+
+                showOutput(rmOutput)
+                break
+            case 'unlink':                
+                if (values.length === 2) {
+                    if(getFile(values[1])) {
+                        dispatch(removeFile(getFile(values[1])))
+                        doNothing()
+                        break
+                    }
+                    showOutput('this file doesnt exist')
+                    break
+                }
+                showOutput('you can only delete one file')
                 break
             default:
                 // check if user entered white space/s
