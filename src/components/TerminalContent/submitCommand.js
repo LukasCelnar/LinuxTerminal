@@ -5,7 +5,8 @@ import {
     createFile, 
     changeFilePath, 
     clearContentHistory,
-    removeFile 
+    removeFile,
+    changeFile 
 } from '../../actions';
 
 export default (inputValue) => {
@@ -256,6 +257,64 @@ export default (inputValue) => {
                 };
                 // outputs that user is trying to delete more then one file which he cant with 'unlink'
                 showOutput('you can only delete one file');
+                break;
+            case 'mv':
+                if (values.length === 3) {
+                    if (values[2].slice(-1) === '/') { values[2] = values[2].slice(0, -1) }
+                    // get dir/file
+                    const dirFile = getDirFile(values[1])
+
+                    // get destination directory
+                    const desDir = values[2].split('/').slice(-1)[0];
+                    let desPath = values[2].split('/').slice(0, -1).join('/');
+                    if (getState().filePath === '/') {
+                        desPath = '/' + desPath;
+                    } else {
+                        desPath = getState().filePath + '/' + desPath;
+                    }
+
+                    if (values[2].includes("/") && !_.find(getState().files, { name: desDir, path: desPath, type: 'directory' })) {
+                        showOutput('this destination folder doesnt exist');
+                        break
+                    } else if (!values[2].includes("/") && !_.find(getState().files, { name: values[2], path: getState().filePath, type: 'directory' })) {
+                        showOutput('this destination folder doesnt exist');
+                        break
+                    };
+                    
+                    // true if dirFile returned object and not undefined
+                    if (dirFile) {
+
+                        if (getState().filePath === '/') {
+                            dispatch(changeFile(dirFile, { name: dirFile.name, type: dirFile.type, path: '/' + values[2], color: dirFile.color }));
+                            getState().files.map(file => {
+                                if (file.path.includes('/' + dirFile.name)) {
+                                    const newPath = '/' + values[2] + file.path
+                                    dispatch(changeFile(file, { name: file.name, type: file.type, path: newPath, color: file.color }));
+                                }
+                                return null;
+                            })
+                        } else {
+                            dispatch(changeFile(dirFile, { name: dirFile.name, type: dirFile.type, path: dirFile.path + '/' + values[2], color: dirFile.color }));
+                            getState().files.map(file => {
+                                if (file.path.includes(dirFile.path + '/' + dirFile.name)) {
+                                    const newPath = dirFile.path + '/' + values[2] + file.path.replace(dirFile.path, '')
+                                    dispatch(changeFile(file, { name: file.name, type: file.type, path: newPath, color: file.color }));
+                                }
+                                return null;
+                            })
+                        }
+                        doNothing();
+                        break;
+                    };
+
+                    // else output that file or dir doesnt exist
+                    showOutput(`file or directory ${values[1]} doesnt exist`);
+
+                    //dirFile.path = `${dirFile.path}/${values[2]}`
+                    break;
+                }
+
+                throwError();
                 break;
             default:
                 // check if user entered white space/s

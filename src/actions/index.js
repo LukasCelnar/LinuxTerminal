@@ -34,6 +34,13 @@ export const removeFile = (file) => {
     };
 };
 
+export const changeFile = (from, to) => {
+    return {
+        type: 'CHANGE_FILE',
+        payload: { from, to }
+    }
+}
+
 export const changeFilePath = (path) => {
     return {
         type: 'CHANGE_FILE_PATH',

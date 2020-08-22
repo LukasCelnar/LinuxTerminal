@@ -33,6 +33,8 @@ export default (state = defaultFiles, action) => {
             return [ ...state, action.payload ];
         case 'REMOVE_FILE':
             return _.reject(state, action.payload);
+        case 'CHANGE_FILE':
+            return [ ..._.reject(state, action.payload.from), action.payload.to ];
         default:
             return state;
     };
