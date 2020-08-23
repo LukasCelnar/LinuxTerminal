@@ -523,8 +523,8 @@ export default (inputValue) => {
                         if (getState().filePath === '/') {
                             const newPath = '/' + values[2]
                             // checks if file with this name already exists in path that we are trying to copy our file to, if so it is going to delete that old file
-                            if (_.find(getState().files, { name: dirFile.name, path: newPath, type: 'file' })) {
-                                dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: newPath, type: 'file' })))
+                            if (_.find(getState().files, { name: dirFile.name, path: newPath })) {
+                                dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: newPath })))
                             }
                             // creates (copies) new file in selected path
                             dispatch(createFile(dirFile.name, newPath, 'file', '#fff'))
@@ -534,12 +534,17 @@ export default (inputValue) => {
                         // true if user is trying to copy something that doesnt live in root route
                         } else {
                             const newPath = dirFile.path + '/' + values[2]
-                            // checks if file with this name already exists in path that we are trying to copy our file to, if so it is going to delete that old file
-                            if (_.find(getState().files, { name: dirFile.name, path: newPath, type: 'file' })) {
+                            // checks if file with this name already exists in path that we are trying to copy our file to, if so it is going to rewrite (delete) that old file
+                            if (_.find(getState().files, { name: dirFile.name, path: newPath })) {
+                                if (dirFile.type === 'file' && _.find(getState().files, { name: dirFile.name, path: newPath }).type === 'directory') {
+                                    showOutput(`cannot overwrite directory '${values[2] + '/' + dirFile.name}' with non-directory '${dirFile.name}'`);
+                                    break;
+                                };
+
                                 dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: newPath, type: 'file' })))
-                            }
+                            };
                             // creates (copies) new file in selected path
-                            dispatch(createFile(dirFile.name, newPath, 'file', '#fff'))
+                            dispatch(createFile(dirFile.name, newPath, 'file', '#fff'));
 
                             // with cp user can only copy files so we dont need to check for files/dirs inside that
                         }
