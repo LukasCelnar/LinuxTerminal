@@ -299,6 +299,17 @@ export default (inputValue) => {
                             // checks if file/dir with this name already exists in path that we are trying to move our files/dirs to, if so it is going to delete that old dir/file
                             if (_.find(getState().files, { name: dirFile.name, path: '/' + values[2], type: dirFile.type })) {
                                 dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: '/' + values[2], type: dirFile.type })));
+
+                                // true if we are trying to delete dir with lines of code above
+                                if (dirFile.type === 'directory') {
+                                    // deletes all the files/dirs that were stored in overwrited dir
+                                    getState().files.map(file => {
+                                        if (file.path.includes('/' + values[2] + '/' + dirFile.name)) {
+                                            dispatch(removeFile(_.find(getState().files, { name: file.name, path: file.path, type: file.type })));
+                                        }
+                                        return null
+                                    })
+                                }
                             };
                             // changes file path (moves that file)
                             dispatch(changeFile(dirFile, { name: dirFile.name, type: dirFile.type, path: '/' + values[2], color: dirFile.color }));
@@ -322,6 +333,17 @@ export default (inputValue) => {
                             // checks if file/dir with this name already exists in path that we are trying to move our files/dirs to, if so it is going to delete that old dir/file
                             if (_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[2], type: dirFile.type })) {
                                 dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[2], type: dirFile.type })));
+
+                                // true if we are trying to delete dir with lines of code above
+                                if (dirFile.type === 'directory') {
+                                    // deletes all the files/dirs that were stored in overwrited dir
+                                    getState().files.map(file => {
+                                        if (file.path.includes(dirFile.path + '/' + values[2] + '/' + dirFile.name)) {
+                                            dispatch(removeFile(_.find(getState().files, { name: file.name, path: file.path, type: file.type })));
+                                        }
+                                        return null
+                                    })
+                                }
                             };
                             // changes file path (moves that file)
                             dispatch(changeFile(dirFile, { name: dirFile.name, type: dirFile.type, path: dirFile.path + '/' + values[2], color: dirFile.color }));
@@ -333,6 +355,14 @@ export default (inputValue) => {
                                     // checks if dir/file that we are trying to move already lives in that new path, if so its gonna delete that dir/file
                                     if (_.find(getState().files, { name: file.name, path: newPath, type: file.type })) {
                                         dispatch(removeFile(_.find(getState().files, { name: file.name, path: newPath, type: file.type })));
+
+                                        // true if we are trying to delete dir with lines of code above
+                                        if (dirFile.type === 'directory') {
+                                            // deletes all the files/dirs that were stored in overwrited dir
+                                            if (file.path.includes(dirFile.path + '/' + dirFile.name + file.name)) {
+                                                dispatch(removeFile(_.find(getState().files, { name: file.name, path: file.path, type: file.type })));
+                                            }
+                                        }
                                     };
                                     dispatch(changeFile(file, { name: file.name, type: file.type, path: newPath, color: file.color }));
                                 }
@@ -388,6 +418,17 @@ export default (inputValue) => {
                                 // checks if file/dir with this name already exists in path that we are trying to copy our files/dirs to, if so it is going to delete that old file
                                 if (_.find(getState().files, { name: dirFile.name, path: '/' + values[3] })) {
                                     dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: '/' + values[3] })));
+
+                                    // true if we are trying to delete dir with lines of code above
+                                    if (dirFile.type === 'directory') {
+                                        // deletes all the files/dirs that were stored in overwrited dir
+                                        getState().files.map(file => {
+                                            if (file.path.includes('/' + values[3] + '/' + dirFile.name)) {
+                                                dispatch(removeFile(_.find(getState().files, { name: file.name, path: file.path, type: file.type })));
+                                            }
+                                            return null
+                                        })
+                                    }
                                 };
                                 // creates (copies) new file/dir in selected path
                                 dispatch(createFile(dirFile.name, '/' + values[3], dirFile.type, dirFile.color ));
@@ -412,6 +453,17 @@ export default (inputValue) => {
                                 // checks if file/dir with this name already exists in path that we are trying to copy our files/dirs to, if so it is going to delete that old file
                                 if (_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[3] })) {
                                     dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[3] })));
+
+                                    // true if we are trying to delete dir with lines of code above
+                                    if (dirFile.type === 'directory') {
+                                        // deletes all the files/dirs that were stored in overwrited dir
+                                        getState().files.map(file => {
+                                            if (file.path.includes(dirFile.path + '/' + values[3] + '/' + dirFile.name)) {
+                                                dispatch(removeFile(_.find(getState().files, { name: file.name, path: file.path, type: file.type })));
+                                            }
+                                            return null
+                                        })
+                                    }
                                 };
                                 // creates (copies) new file/dir in selected path
                                 dispatch(createFile( dirFile.name, dirFile.path + '/' + values[3], dirFile.type, dirFile.color ));
