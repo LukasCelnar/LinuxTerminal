@@ -10,8 +10,14 @@ import {
 } from '../../actions';
 
 export default (inputValue) => {
-    const values = inputValue.split(" ");
+    let values = inputValue.split(" ");
     const valuesWithoutSpaces = values.filter(value => value !== '')
+    let sudo = false
+
+    if (values[0] === 'sudo') {
+        values = values.slice(1)
+        sudo = true
+    }
 
     return (dispatch, getState) => {
 
@@ -22,7 +28,7 @@ export default (inputValue) => {
         const getDir = name => _.find(getState().files, { name: name, type: 'directory', path: getState().filePath });
         const getFile = name => _.find(getState().files, { name: name, type: 'file', path: getState().filePath });
         const getDirFile = name => _.find(getState().files, { name: name, path: getState().filePath });
-        
+
         switch (values[0]) {
             case 'mkdir':
                 if (values.length === 2 && values[1]) {
@@ -260,11 +266,13 @@ export default (inputValue) => {
                 break;
             case 'mv':
                 if (values.length === 3) {
+                    // if user entered file path with '/' on the end of that string, its gonna be deleted
                     if (values[2].slice(-1) === '/') { values[2] = values[2].slice(0, -1) }
-                    // get dir/file
+
+                    // gets dir/file
                     const dirFile = getDirFile(values[1])
 
-                    // get destination directory
+                    // gets destination directory and stores it in desPath variable
                     const desDir = values[2].split('/').slice(-1)[0];
                     let desPath = values[2].split('/').slice(0, -1).join('/');
                     if (getState().filePath === '/') {
@@ -273,6 +281,7 @@ export default (inputValue) => {
                         desPath = getState().filePath + '/' + desPath;
                     }
 
+                    // checks if destination path is valid path
                     if (values[2].includes("/") && !_.find(getState().files, { name: desDir, path: desPath, type: 'directory' })) {
                         showOutput('this destination folder doesnt exist');
                         break
@@ -284,38 +293,225 @@ export default (inputValue) => {
                     // true if dirFile returned object and not undefined
                     if (dirFile) {
 
+                        // true if user is trying to move something from root path
                         if (getState().filePath === '/') {
+
+                            // checks if file/dir with this name already exists in path that we are trying to move our files/dirs to, if so it is going to delete that old dir/file
+                            if (_.find(getState().files, { name: dirFile.name, path: '/' + values[2], type: dirFile.type })) {
+                                dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: '/' + values[2], type: dirFile.type })));
+                            };
+                            // changes file path (moves that file)
                             dispatch(changeFile(dirFile, { name: dirFile.name, type: dirFile.type, path: '/' + values[2], color: dirFile.color }));
+                            // loops through every file and changes path to files/dirs that live inside a dir that has been moved with "mv"
                             getState().files.map(file => {
                                 if (file.path.includes('/' + dirFile.name)) {
                                     const newPath = '/' + values[2] + file.path
+
+                                    // checks if dir/file that we are trying to move already lives in that new path, if so its gonna delete that dir/file
+                                    if (_.find(getState().files, { name: file.name, path: newPath, type: file.type })) {
+                                        dispatch(removeFile(_.find(getState().files, { name: file.name, path: newPath, type: file.type })));
+                                    };
                                     dispatch(changeFile(file, { name: file.name, type: file.type, path: newPath, color: file.color }));
                                 }
                                 return null;
                             })
+
+                        // true if user is trying to move something that doesnt live in root route
                         } else {
+
+                            // checks if file/dir with this name already exists in path that we are trying to move our files/dirs to, if so it is going to delete that old dir/file
+                            if (_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[2], type: dirFile.type })) {
+                                dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[2], type: dirFile.type })));
+                            };
+                            // changes file path (moves that file)
                             dispatch(changeFile(dirFile, { name: dirFile.name, type: dirFile.type, path: dirFile.path + '/' + values[2], color: dirFile.color }));
+                            // loops through every file and changes path to files/dirs that live inside a dir that has been moved with "mv"
                             getState().files.map(file => {
                                 if (file.path.includes(dirFile.path + '/' + dirFile.name)) {
                                     const newPath = dirFile.path + '/' + values[2] + file.path.replace(dirFile.path, '')
+
+                                    // checks if dir/file that we are trying to move already lives in that new path, if so its gonna delete that dir/file
+                                    if (_.find(getState().files, { name: file.name, path: newPath, type: file.type })) {
+                                        dispatch(removeFile(_.find(getState().files, { name: file.name, path: newPath, type: file.type })));
+                                    };
                                     dispatch(changeFile(file, { name: file.name, type: file.type, path: newPath, color: file.color }));
                                 }
                                 return null;
                             })
                         }
+
+                        // if everything goes well, function bellow will be called and user shouldnt see an output
                         doNothing();
                         break;
                     };
 
                     // else output that file or dir doesnt exist
                     showOutput(`file or directory ${values[1]} doesnt exist`);
-
-                    //dirFile.path = `${dirFile.path}/${values[2]}`
                     break;
                 }
 
                 throwError();
                 break;
+            case 'cp':
+                if (values.length === 4) {
+                    if (values[1] === '-r') {
+                        // if user entered file path with '/' on the end of that string, its gonna be deleted
+                        if (values[3].slice(-1) === '/') { values[3] = values[3].slice(0, -1) };
+
+                        // gets dir/file, (in this file stands for both file and directory)
+                        const dirFile = getDirFile(values[2]);
+
+                        // gets destination directory and stores it in desPath variable
+                        const desDir = values[3].split('/').slice(-1)[0];
+                        let desPath = values[3].split('/').slice(0, -1).join('/');
+                        if (getState().filePath === '/') {
+                            desPath = '/' + desPath;
+                        } else {
+                            desPath = getState().filePath + '/' + desPath;
+                        }
+
+                        // checks if destination path is valid path
+                        if (values[3].includes("/") && !_.find(getState().files, { name: desDir, path: desPath, type: 'directory' })) {
+                            showOutput('this destination folder doesnt exist');
+                            break;
+                        } else if (!values[3].includes("/") && !_.find(getState().files, { name: values[3], path: getState().filePath, type: 'directory' })) {
+                            showOutput('this destination folder doesnt exist');
+                            break;
+                        };
+
+                        // true if dirFile returned object and not undefined
+                        if (dirFile) {
+
+                            // true if user is trying to copy something from root path
+                            if (getState().filePath === '/') {
+
+                                // checks if file/dir with this name already exists in path that we are trying to copy our files/dirs to, if so it is going to delete that old file
+                                if (_.find(getState().files, { name: dirFile.name, path: '/' + values[3] })) {
+                                    dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: '/' + values[3] })));
+                                };
+                                // creates (copies) new file/dir in selected path
+                                dispatch(createFile(dirFile.name, '/' + values[3], dirFile.type, dirFile.color ));
+
+                                // loops through every file and changes path to files/dirs that live inside a dir that has been created (copied)
+                                getState().files.map(file => {
+                                    const newPath = '/' + values[3] + file.path;
+                                    if (file.path.includes('/' + dirFile.name)) {
+                                        // checks if dir/file that we are trying to create (copy) already lives in that new path, if so its gonna delete that dir/file
+                                        if (_.find(getState().files, { name: file.name, path: newPath, type: file.type })) {
+                                            dispatch(removeFile(_.find(getState().files, { name: file.name, path: newPath, type: file.type })));
+                                        };
+                                        dispatch(createFile( file.name, newPath, file.type, file.color ));
+                                    };
+
+                                    return null;
+                                });
+
+                            // true if user is trying to copy something that doesnt live in root route
+                            } else {
+
+                                // checks if file/dir with this name already exists in path that we are trying to copy our files/dirs to, if so it is going to delete that old file
+                                if (_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[3] })) {
+                                    dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[3] })));
+                                };
+                                // creates (copies) new file/dir in selected path
+                                dispatch(createFile( dirFile.name, dirFile.path + '/' + values[3], dirFile.type, dirFile.color ));
+
+                                // loops through every file and changes path to files/dirs that live inside a dir that has been created (copied)
+                                getState().files.map(file => {
+                                    const newPath = dirFile.path + '/' + values[3] + file.path.replace(dirFile.path, '');
+                                    if (file.path.includes(dirFile.path + '/' + dirFile.name)) {
+                                        // checks if dir/file that we are trying to create (copy) already lives in that new path, if so its gonna delete that dir/file
+                                        if (_.find(getState().files, { name: file.name, path: newPath, type: file.type })) {
+                                            dispatch(removeFile(_.find(getState().files, { name: file.name, path: newPath, type: file.type })));
+                                        };
+                                        dispatch(createFile(file.name, newPath, file.type, file.color));
+                                    };
+
+                                    return null;
+                                });
+                            };
+
+                            // if everything goes well, function bellow will be called and user shouldnt see an output
+                            doNothing();
+                            break;
+                        };
+                    };
+                };
+
+                // normal copy (cp) command
+                if (values.length === 3) {
+                    // if user entered file path with '/' on the end of that string, its gonna be deleted
+                    if (values[2].slice(-1) === '/') { values[2] = values[2].slice(0, -1) }
+
+                    // gets file
+                    const dirFile = getFile(values[1])
+
+                    // gets destination directory and stores it in desPath variable
+                    const desDir = values[2].split('/').slice(-1)[0];
+                    let desPath = values[2].split('/').slice(0, -1).join('/');
+                    if (getState().filePath === '/') {
+                        desPath = '/' + desPath;
+                    } else {
+                        desPath = getState().filePath + '/' + desPath;
+                    }
+
+                    // checks if destination path is valid path
+                    if (values[2].includes("/") && !_.find(getState().files, { name: desDir, path: desPath, type: 'directory' })) {
+                        showOutput('this destination folder doesnt exist');
+                        break
+                    } else if (!values[2].includes("/") && !_.find(getState().files, { name: values[2], path: getState().filePath, type: 'directory' })) {
+                        showOutput('this destination folder doesnt exist');
+                        break
+                    };
+                    
+                    // true if dirFile returned object and not undefined
+                    if (dirFile) {
+
+                        // true if user is trying to copy something from root path
+                        if (getState().filePath === '/') {
+                            const newPath = '/' + values[2]
+                            // checks if file with this name already exists in path that we are trying to copy our file to, if so it is going to delete that old file
+                            if (_.find(getState().files, { name: dirFile.name, path: newPath, type: 'file' })) {
+                                dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: newPath, type: 'file' })))
+                            }
+                            // creates (copies) new file in selected path
+                            dispatch(createFile(dirFile.name, newPath, 'file', '#fff'))
+                        
+                            // with cp user can only copy files so we dont need to check for files/dirs inside that
+
+                        // true if user is trying to copy something that doesnt live in root route
+                        } else {
+                            const newPath = dirFile.path + '/' + values[2]
+                            // checks if file with this name already exists in path that we are trying to copy our file to, if so it is going to delete that old file
+                            if (_.find(getState().files, { name: dirFile.name, path: newPath, type: 'file' })) {
+                                dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: newPath, type: 'file' })))
+                            }
+                            // creates (copies) new file in selected path
+                            dispatch(createFile(dirFile.name, newPath, 'file', '#fff'))
+
+                            // with cp user can only copy files so we dont need to check for files/dirs inside that
+                        }
+
+                        // if everything goes well, function bellow will be called and user shouldnt see an output
+                        doNothing();
+                        break;
+                    };
+
+                    // else output that file or dir doesnt exist
+                    showOutput(`file ${values[1]} doesnt exist`);
+                    break;
+                }
+
+                throwError();
+                break;
+            case 'whoami':
+                // true if user used sudo command
+                if (sudo) {
+                    showOutput('root')
+                    break
+                }
+                showOutput('name')
+                break
             default:
                 // check if user entered white space/s
                 if (!valuesWithoutSpaces.length) {
