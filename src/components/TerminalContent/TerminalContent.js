@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { changeInputValue, updateContentHistory} from '../../actions';
-import submitCommand from './submitCommand';
+import submitCommand from '../../commands/submitCommand';
 import './TerminalContent.css'
 
 class TerminalContent extends Component {

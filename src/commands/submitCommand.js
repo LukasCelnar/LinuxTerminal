@@ -7,7 +7,7 @@ import {
     clearContentHistory,
     removeFile,
     changeFile 
-} from '../../actions';
+} from '../actions';
 
 export default (inputValue) => {
     let values = inputValue.split(" ");

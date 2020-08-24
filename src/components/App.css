@@ -20,4 +20,8 @@
 
 body {
     background-image: url('/images/ubuntu-background.jpg');
+    background-attachment:fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
 }
