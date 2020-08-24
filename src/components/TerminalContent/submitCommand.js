@@ -296,6 +296,19 @@ export default (inputValue) => {
                         // true if user is trying to move something from root path
                         if (getState().filePath === '/') {
 
+                            let isEmpty = true
+                            getState().files.map(file => {
+                                if (file.path.includes('/' + values[2] +  '/' + dirFile.name)) {
+                                    isEmpty = false
+                                }
+                                return null
+                            })
+
+                            if (!isEmpty) {
+                                showOutput(`mv: cannot move '${values[2]}' to '${'/' + dirFile.name}': directory not empty`)
+                                break
+                            }
+
                             // checks if file/dir with this name already exists in path that we are trying to move our files/dirs to, if so it is going to delete that old dir/file
                             if (_.find(getState().files, { name: dirFile.name, path: '/' + values[2], type: dirFile.type })) {
                                 dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: '/' + values[2], type: dirFile.type })));
@@ -329,6 +342,19 @@ export default (inputValue) => {
 
                         // true if user is trying to move something that doesnt live in root route
                         } else {
+
+                            let isEmpty = true
+                            getState().files.map(file => {
+                                if (file.path.includes(dirFile.path + '/' + values[2] + '/' + dirFile.name)) {
+                                    isEmpty = false
+                                }
+                                return null
+                            })
+
+                            if (!isEmpty) {
+                                showOutput(`mv: cannot move '${values[2]}' to '${'/' + dirFile.name}': directory not empty`)
+                                break
+                            }
 
                             // checks if file/dir with this name already exists in path that we are trying to move our files/dirs to, if so it is going to delete that old dir/file
                             if (_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[2], type: dirFile.type })) {
@@ -417,18 +443,19 @@ export default (inputValue) => {
 
                                 // checks if file/dir with this name already exists in path that we are trying to copy our files/dirs to, if so it is going to delete that old file
                                 if (_.find(getState().files, { name: dirFile.name, path: '/' + values[3] })) {
-                                    dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: '/' + values[3] })));
 
-                                    // true if we are trying to delete dir with lines of code above
-                                    if (dirFile.type === 'directory') {
-                                        // deletes all the files/dirs that were stored in overwrited dir
-                                        getState().files.map(file => {
-                                            if (file.path.includes('/' + values[3] + '/' + dirFile.name)) {
-                                                dispatch(removeFile(_.find(getState().files, { name: file.name, path: file.path, type: file.type })));
-                                            }
-                                            return null
-                                        })
-                                    }
+                                    // checks if file with different type already exists in destination path if so, it is gonna throw error and break out of a switch statement
+                                    if (_.find(getState().files, { name: dirFile.name, path: '/' + values[3] }).type !== dirFile.type) {
+                                        if (_.find(getState().files, { name: dirFile.name, path: '/' + values[3] }).type === 'directory') {
+                                            showOutput(`cannot overwrite directory '${values[3] + '/' + dirFile.name}' with non-directory '${dirFile.name}'`);
+            
+                                        } else {
+                                            showOutput(`cannot overwrite non-directory '${values[3] + '/' + dirFile.name}' with directory '${dirFile.name}'`);
+                                        }
+                                        break;
+                                    };
+
+                                    dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: '/' + values[3] })));
                                 };
                                 // creates (copies) new file/dir in selected path
                                 dispatch(createFile(dirFile.name, '/' + values[3], dirFile.type, dirFile.color ));
@@ -452,18 +479,19 @@ export default (inputValue) => {
 
                                 // checks if file/dir with this name already exists in path that we are trying to copy our files/dirs to, if so it is going to delete that old file
                                 if (_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[3] })) {
-                                    dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[3] })));
 
-                                    // true if we are trying to delete dir with lines of code above
-                                    if (dirFile.type === 'directory') {
-                                        // deletes all the files/dirs that were stored in overwrited dir
-                                        getState().files.map(file => {
-                                            if (file.path.includes(dirFile.path + '/' + values[3] + '/' + dirFile.name)) {
-                                                dispatch(removeFile(_.find(getState().files, { name: file.name, path: file.path, type: file.type })));
-                                            }
-                                            return null
-                                        })
-                                    }
+                                    // checks if file with different type already exists in destination path if so, it is gonna throw error and break out of a switch statement
+                                    if (_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[3] }).type !== dirFile.type) {
+                                        if (_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[3] }).type === 'directory') {
+                                            showOutput(`cannot overwrite directory '${values[3] + '/' + dirFile.name}' with non-directory '${dirFile.name}'`);
+            
+                                        } else {
+                                            showOutput(`cannot overwrite non-directory '${values[3] + '/' + dirFile.name}' with directory '${dirFile.name}'`);
+                                        }
+                                        break;
+                                    };
+
+                                    dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: dirFile.path + '/' + values[3] })));
                                 };
                                 // creates (copies) new file/dir in selected path
                                 dispatch(createFile( dirFile.name, dirFile.path + '/' + values[3], dirFile.type, dirFile.color ));
@@ -522,8 +550,13 @@ export default (inputValue) => {
                         // true if user is trying to copy something from root path
                         if (getState().filePath === '/') {
                             const newPath = '/' + values[2]
+                            
                             // checks if file with this name already exists in path that we are trying to copy our file to, if so it is going to delete that old file
                             if (_.find(getState().files, { name: dirFile.name, path: newPath })) {
+                                if (dirFile.type === 'file' && _.find(getState().files, { name: dirFile.name, path: newPath }).type === 'directory') {
+                                    showOutput(`cannot overwrite directory '${values[2] + '/' + dirFile.name}' with non-directory '${dirFile.name}'`);
+                                    break;
+                                };
                                 dispatch(removeFile(_.find(getState().files, { name: dirFile.name, path: newPath })))
                             }
                             // creates (copies) new file in selected path
