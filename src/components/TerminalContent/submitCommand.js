@@ -283,10 +283,10 @@ export default (inputValue) => {
 
                     // checks if destination path is valid path
                     if (values[2].includes("/") && !_.find(getState().files, { name: desDir, path: desPath, type: 'directory' })) {
-                        showOutput('this destination folder doesnt exist');
+                        showOutput('this destination directory doesnt exist');
                         break
                     } else if (!values[2].includes("/") && !_.find(getState().files, { name: values[2], path: getState().filePath, type: 'directory' })) {
-                        showOutput('this destination folder doesnt exist');
+                        showOutput('this destination directory doesnt exist');
                         break
                     };
                     
@@ -296,6 +296,7 @@ export default (inputValue) => {
                         // true if user is trying to move something from root path
                         if (getState().filePath === '/') {
 
+                            // checks if dir we are trying to move already exists in that path if so, it is going to check if that dir is empty, if it is not its gonna error out and break
                             let isEmpty = true
                             getState().files.map(file => {
                                 if (file.path.includes('/' + values[2] +  '/' + dirFile.name)) {
@@ -343,6 +344,7 @@ export default (inputValue) => {
                         // true if user is trying to move something that doesnt live in root route
                         } else {
 
+                            // checks if dir we are trying to move already exists in that path if so, it is going to check if that dir is empty, if it is not its gonna error out and break
                             let isEmpty = true
                             getState().files.map(file => {
                                 if (file.path.includes(dirFile.path + '/' + values[2] + '/' + dirFile.name)) {
@@ -402,7 +404,7 @@ export default (inputValue) => {
                     };
 
                     // else output that file or dir doesnt exist
-                    showOutput(`file or directory ${values[1]} doesnt exist`);
+                    showOutput(`file or directory '${values[1]}' doesnt exist`);
                     break;
                 }
 
@@ -428,10 +430,10 @@ export default (inputValue) => {
 
                         // checks if destination path is valid path
                         if (values[3].includes("/") && !_.find(getState().files, { name: desDir, path: desPath, type: 'directory' })) {
-                            showOutput('this destination folder doesnt exist');
+                            showOutput('this destination directory doesnt exist');
                             break;
                         } else if (!values[3].includes("/") && !_.find(getState().files, { name: values[3], path: getState().filePath, type: 'directory' })) {
-                            showOutput('this destination folder doesnt exist');
+                            showOutput('this destination directory doesnt exist');
                             break;
                         };
 
@@ -537,10 +539,10 @@ export default (inputValue) => {
 
                     // checks if destination path is valid path
                     if (values[2].includes("/") && !_.find(getState().files, { name: desDir, path: desPath, type: 'directory' })) {
-                        showOutput('this destination folder doesnt exist');
+                        showOutput('this destination directory doesnt exist');
                         break
                     } else if (!values[2].includes("/") && !_.find(getState().files, { name: values[2], path: getState().filePath, type: 'directory' })) {
-                        showOutput('this destination folder doesnt exist');
+                        showOutput('this destination directory doesnt exist');
                         break
                     };
                     
@@ -588,7 +590,7 @@ export default (inputValue) => {
                     };
 
                     // else output that file or dir doesnt exist
-                    showOutput(`file ${values[1]} doesnt exist`);
+                    showOutput(`file '${values[1]}' doesnt exist`);
                     break;
                 }
 
