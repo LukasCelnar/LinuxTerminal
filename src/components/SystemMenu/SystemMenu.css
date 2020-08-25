@@ -1,0 +1,22 @@
+.system-menu {
+    background-color: rgb(24, 24, 24);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99999;
+    color: #fff;
+    padding: 0.35rem;
+    font-family: 'Ubuntu-Light';
+    display: flex;
+}
+
+.system-menu__activities {
+    padding-left: 0.35rem;
+}
+
+.system-menu__date {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}

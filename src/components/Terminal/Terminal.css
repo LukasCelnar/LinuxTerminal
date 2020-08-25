@@ -6,6 +6,13 @@
     position: absolute;
     top: 30%;
     left: 30%;
+
+    /* new
+    resize: both;
+    overflow: hidden;
+    min-width: 400px;
+    min-height: 200px;
+    new */
 }
 
 .terminal__menu {
@@ -77,6 +84,11 @@
     border-bottom-left-radius: 2px;
     overflow-y: scroll;
     padding: 2px;
+
+    /* new
+    min-height: 500px;
+    height: 100%;
+    new */
 }
 
 .terminal__content::-webkit-scrollbar {

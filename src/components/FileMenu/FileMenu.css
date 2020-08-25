@@ -1,0 +1,30 @@
+.file-menu {
+    background-color: rgba(44, 22, 44, 0.7);
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 999;
+}
+
+.file-menu__image-container {
+    text-align: center;
+    margin: 1rem;
+}
+
+.file-menu__first-icon {
+    padding-top: 2rem;
+}
+
+.file-menu__image {
+    height: 3rem;
+    width: 3rem;
+    cursor: pointer;
+}
+
+.file-menu__menu-icon {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 0.7rem;
+    padding-bottom: 2rem;
+}
