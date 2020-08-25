@@ -47,3 +47,10 @@ export const changeFilePath = (path) => {
         payload: path
     }
 }
+
+export const showWindow = (window) => {
+    return {
+        type: 'SHOW_WINDOW',
+        payload: window
+    }
+}

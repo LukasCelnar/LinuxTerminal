@@ -33,6 +33,11 @@ class SystemMenu extends Component {
             <div className="system-menu">
                 <div className="system-menu__activities">Activities</div>
                 <div className="system-menu__date">{`${day} ${month} ${hours}${hours ? ':' : ''}${minutes}`}</div>
+                <div className="system-menu__image-container">
+                    <img alt="" src="/images/speaker.png" className="system-menu__image"/>
+                    <img alt="" src="/images/power.png" className="system-menu__image"/>
+                    <img alt="" src="/images/dropdown.png" className="system-menu__image"/>
+                </div>
             </div>
         )
     }

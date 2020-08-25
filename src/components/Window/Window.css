@@ -1,4 +1,4 @@
-.terminal {
+.window {
     width: 700px;
     color: #fff;
     font-family: 'Ubuntu-Medium';
@@ -13,9 +13,13 @@
     min-width: 400px;
     min-height: 200px;
     new */
+    resize: both;
+    overflow: hidden;
+    min-width: 400px;
+    min-height: 400px;
 }
 
-.terminal__menu {
+.window__menu {
     background-color: #3c3b37;
     height: 40px;
     border-top-left-radius: 7px;
@@ -24,11 +28,11 @@
     cursor: pointer;
 }
 
-.terminal__menu-name {
+.window__menu-name {
     font-size: 1.1rem;
 }
 
-.terminal__menu-buttons {
+.window__menu-buttons {
     display: flex;
     list-style: none;
     margin-left: auto;
@@ -36,48 +40,48 @@
     align-self: center;
 }
 
-.terminal__menu-buttons-img {
+.window__menu-buttons-img {
     width: 15px;
     height: 15px;
 }
 
-.terminal__menu-buttons-img {
+.window__menu-buttons-img {
     padding: 0.27rem;
     border-radius: 50%;
     transition: all 0.2s;
 }
 
-.terminal__menu-buttons-item {
+.window__menu-buttons-item {
     margin-right: 0.7rem;
 }
 
-.terminal__menu-buttons-img {
+.window__menu-buttons-img {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
 }
 
-.terminal__menu-rectangle-button:hover, .terminal__menu-minus-button:hover {
+.window__menu-rectangle-button:hover, .window__menu-minus-button:hover {
     background-color: rgb(88, 88, 88);
 }
 
-.terminal__menu-x-button {
+.window__menu-x-button {
     background-color: rgb(182, 54, 54);
     transition: all 0.2s;
 }
 
-.terminal__menu-x-button:hover {
+.window__menu-x-button:hover {
     background-color: rgb(211, 79, 79);
 }
 
-.terminal__menu-name {
+.window__menu-name {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
     align-self: center;
 }
 
-.terminal__content {
+.window__content {
     background-color: rgba(56, 4, 40, .9);
     height: 500px;
     border-bottom-right-radius: 2px;
@@ -85,21 +89,23 @@
     overflow-y: scroll;
     padding: 2px;
 
-    /* new
-    min-height: 500px;
+    /*
     height: 100%;
-    new */
+    min-height: 500px;
+    */
+    height: 100%;
+    min-height: 400px;
 }
 
-.terminal__content::-webkit-scrollbar {
+.window__content::-webkit-scrollbar {
     width: 6px;
 }
 
-.terminal__content::-webkit-scrollbar {
+.window__content::-webkit-scrollbar {
     background-color: transparent;
 }
 
-.terminal__content::-webkit-scrollbar-thumb {
+.window__content::-webkit-scrollbar-thumb {
     background-color: rgb(173, 173, 173);
     border-radius: 3px;
 }
