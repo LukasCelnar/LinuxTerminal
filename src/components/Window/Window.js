@@ -30,11 +30,6 @@ class Window extends Component {
         }
     }
 
-    onDrag(e) {
-        console.log(e)
-    }
-    
-
     render() {
         return (
             <Draggable handle=".window__menu">
@@ -57,9 +52,7 @@ class Window extends Component {
 };
 
 const mapStateToProps = state => {
-    return {
-        contentHistory: state.contentHistory
-    }
+    return { contentHistory: state.contentHistory }
 }
 
 export default connect(mapStateToProps, { changeInputValue, updateContentHistory })(Window)

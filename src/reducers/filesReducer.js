@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import defaultFiles from './defaultFiles'
 /*
 
 [
@@ -10,21 +11,6 @@ import _ from 'lodash';
 ]
 
 */
-
-const defaultFiles = [
-    {
-        name: 'home',
-        path: '/',
-        type: 'directory',
-        color: 'rgb(121, 199, 248)'
-    },
-    {
-        name: 'name',
-        path: '/home',
-        type: 'directory',
-        color: 'rgb(121, 199, 248)'
-    }
-]
 
 export default (state = defaultFiles, action) => {
 

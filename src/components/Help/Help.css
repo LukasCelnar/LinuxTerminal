@@ -3,4 +3,11 @@
     color: #000;
     width: 100%;
     height: 100%;
+    padding: 5px;
+}
+
+.help__code {
+    background-color: rgb(201, 201, 201);
+    border-radius: 5px;
+    padding: 2px;
 }

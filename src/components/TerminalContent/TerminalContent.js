@@ -24,13 +24,13 @@ class TerminalContent extends Component {
     render() {
 
         const name = "name@ubuntu"
-
+        
         return (
             <form onSubmit={(e) => this.onFormSubmit(e)} className="terminal__content-form">
                 <div className="terminal__content-container">
                     <div className="terminal__content-input-container">
                         <label className="terminal__content-label">
-                            <span className="terminal__content-name">{name}</span>:<span className="terminal__content-tilde">~</span>$&nbsp;&nbsp;
+                            <span className="terminal__content-name">{name}</span>:<span className="terminal__content-path">~</span>$&nbsp;&nbsp;
                         </label>
                         {this.renderInput()}
                     </div>
