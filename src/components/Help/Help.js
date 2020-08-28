@@ -7,14 +7,14 @@ export default class Help extends Component {
             <div className="help">
                 <h3>Ubuntu Terminal Guide</h3>
                 <div>
-                    Hey, my name is Lukas Celnar and today i want to learn you how to use basic and most common commands that you can 
+                    Hey, my name is <a href="https://github.com/LukasCelnar">Lukas Celnar</a> and today i want to teach you how to use basic and most common shell commands that you can 
                     use in your Terminal.
-                    You might or might not notice but this whole webpage has a UI of Ubuntu.
+                    You might have noticed that this whole webpage has a UI of Ubuntu.
                     What is Ubuntu you may ask ?
                 </div>
                 <br />
                 <div>
-                    <strong>Ubuntu</strong>: is a free operating system that uses the Linux kernel.
+                    <strong><a href="https://en.wikipedia.org/wiki/Ubuntu">Ubuntu</a></strong>: is a free operating system that uses the Linux kernel.
                     It is pronounced "oo-boon-too". It is one of the most popular Linux distributions and it is based on 
                     Debian Linux computer operating system.
                     The word "ubuntu" is an African word meaning "humanity to others".
@@ -24,43 +24,43 @@ export default class Help extends Component {
                 </div>
                 <br />
                 <div>
-                    Now that we have ubuntu out of the way, i would want to learn you some words that are
+                    Now that we have ubuntu out of the way, i would want to teach you some words that are
                     really important in this world and that might confuse you later:
                 </div>
                 <br />
                 <div>
-                    <strong>Terminal</strong>: the text interface to the shell program, can't do anything on its own apart from giving 
+                    <strong><a href="https://en.wikipedia.org/wiki/Terminal_emulator">Terminal</a></strong>: the text interface to the shell program, can't do anything on its own apart from giving 
                     input to the shell and displaying output from shell
                 </div>
                 <br />
                 <div>
-                    <strong>Shell</strong>: a program that processes commands and returns an output, for example terminal runs a shell
+                    <strong><a href="https://en.wikipedia.org/wiki/Shell_(computing)">Shell</a></strong>: a program that processes commands and returns an output, for example terminal that runs a shell
                     is an interface between a user and OS to access to an operating system's services. 
                     It can be either GUI or CLI (Command Line interface)
                 </div>
                 <br />
                 <div>
-                    <strong>sh (Bourne SHell)</strong>: is type of shell program (or shell language).
+                    <strong><a href="https://en.wikipedia.org/wiki/Bourne_shell">sh (Bourne SHell)</a></strong>: is type of shell program (or shell language).
                 </div>
                 <br />
                 <div>
-                    <strong>bash (Bourne Again SHell)</strong>: is a type of shell program (or shell language). 
+                    <strong><a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)">bash (Bourne Again SHell)</a></strong>: is a type of shell program (or shell language). 
                     Bash and shell aren't synonymous. Bash is superset of sh.
                 </div>
                 <br />
                 <div>
-                    Bash will most likely be your default type of shell after installing ubuntu to be completly sure you can 
-                    type: echo $SHELL which gives the full path to your default shell. And echo $0 which gives the name of your 
+                    Bash will most likely be your default type of the shell after installing ubuntu on your machine. To be completly sure you can 
+                    type: echo $SHELL which will give you full path to your default shell. And echo $0 which will give you the name of your 
                     current shell.
                 </div>
                 <br />
                 <div>
-                    <strong>Command line interface (CLI)</strong>: is just a style of user interface that requires users to type in commands to get the computer 
+                    <strong><a href="https://en.wikipedia.org/wiki/Command-line_interface">Command line interface (CLI)</a></strong>: is just a style of user interface that requires users to type in commands to get the computer 
                     to do stuff as opposed to for example a GUI (Graphical user interface) where the user clicks.
                 </div>
                 <br />
                 <div>
-                    <strong>Console</strong>: refers to physical device like monitor and keyboard that is running a terminal that the user types commands
+                    <strong><a href="https://en.wikipedia.org/wiki/Linux_console">Console</a></strong>: refers to physical device like monitor and keyboard that is running a terminal that the user types commands
                     into, but in essence it is just a terminal
                 </div>
                 <br />
@@ -73,8 +73,8 @@ export default class Help extends Component {
                     to go anywhere, you dont have to install Linux. All you need to do is to click on the Terminal icon on your left
                     after that you should see a terminal that is gonna look like Terminal you will most likely see in Ubuntu.
                     Now, to be completly honest, i will mention some commands that might not work here but normaly work
-                    in any Linux Terminal. But dont worry I'll warn you, also you might find some bugs since i had to write
-                    every command from scratch with pure JavaScript (Programming Language). Now lets get to commands
+                    in any Linux Terminal. But dont worry I'll warn you, also you might find some bugs because i had to write
+                    every command from scratch with pure <a href="https://en.wikipedia.org/wiki/JavaScript">JavaScript (Programming Language)</a>.
                 </div>
                 <br />
                 <div>

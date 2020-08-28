@@ -14,7 +14,7 @@ class Window extends Component {
         });
     };
 
-    renderContent() {
+    renderWindow() {
         switch (this.props.type) {
             case 'terminal':
                 return (
@@ -43,7 +43,7 @@ class Window extends Component {
                         </ul>
                     </div>
                     <div style={this.props.contentStyles} className="window__content">
-                        {this.renderContent()}
+                        {this.renderWindow()}
                     </div>
                 </div>
             </Draggable>

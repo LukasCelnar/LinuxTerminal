@@ -1,9 +1,9 @@
 .window {
-    width: 700px;
+    /*width: 700px;*/
     color: #fff;
     font-family: 'Ubuntu-Medium';
     box-shadow: 0 1rem 2rem rgba(0,0,0, 0.2);
-    position: absolute;
+    position: relative;
     top: 30%;
     left: 30%;
 
@@ -17,6 +17,10 @@
     overflow: hidden;
     min-width: 400px;
     min-height: 400px;
+    height: 500px;
+    width: 500px;
+
+    position: relative;
 }
 
 .window__menu {
@@ -26,6 +30,13 @@
     border-top-right-radius: 7px;
     display: flex;
     cursor: pointer;
+    min-height: 40px;
+    
+    
+    position: sticky;
+    top: 0;
+    width: 100%;
+    
 }
 
 .window__menu-name {
@@ -93,8 +104,7 @@
     height: 100%;
     min-height: 500px;
     */
-    height: 100%;
-    min-height: 400px;
+    height: calc(100% - 40px);
 }
 
 .window__content::-webkit-scrollbar {
