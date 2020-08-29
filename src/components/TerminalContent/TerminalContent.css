@@ -36,3 +36,17 @@
     padding: 2px 0;
     font-family: 'Ubuntu-Regular';
 }
+
+@media (min-width: 2600px) {
+    .terminal__content-form {
+        font-size: 3rem;
+    }
+
+    .terminal__content-input {
+        font-size: 3rem;
+    }
+
+    .terminal__content-output {
+        font-size: 3rem;
+    }
+}

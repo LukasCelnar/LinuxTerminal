@@ -114,11 +114,32 @@
     border-radius: 3px;
 }
 
+@media (min-width: 2600px) {
+    .window {
+        font-size: 2rem;
+
+        height: 1000px;
+        width: 1300px;
+    }
+
+    .window__menu-name {
+        font-size: 1.8rem;
+    }
+
+    .window__menu-buttons-img {
+        width: 25px;
+        height: 25px;
+    }
+}
+
 @media (max-width: 700px) {
     .window {
         min-width: 250px;
         height: 300px;
         width: 250px;
+
+        top: 20%;
+        left: 25%;
     } 
 
     .window__menu-name {

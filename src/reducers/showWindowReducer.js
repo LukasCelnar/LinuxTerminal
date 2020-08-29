@@ -1,4 +1,4 @@
-export default (state = '', action) => {
+export default (state = 'help', action) => {
     switch (action.type) {
         case 'SHOW_WINDOW':
             if (action.payload === state) {

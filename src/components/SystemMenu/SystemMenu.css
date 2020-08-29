@@ -31,3 +31,19 @@
     margin-right: 0.8rem;
     cursor: pointer;
 }
+
+@media (min-width: 2600px) {
+    .system-menu {
+        font-size: 2.3rem;
+    }
+
+    .system-menu__image {
+        height: 2.3rem;
+        width: 2.3rem;
+        margin-right: 1.5rem;
+    }
+
+    .system-menu__activities {
+        padding-left: 0.65rem;
+    }
+}
