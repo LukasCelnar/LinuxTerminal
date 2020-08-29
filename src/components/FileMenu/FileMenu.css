@@ -28,3 +28,14 @@
     margin-bottom: 0.7rem;
     padding-bottom: 2rem;
 }
+
+@media (max-width: 700px) {
+    .file-menu__image-container {
+        margin: 0.5rem;
+    }
+
+    .file-menu__image {
+        height: 2rem;
+        width: 2rem;
+    }
+}
