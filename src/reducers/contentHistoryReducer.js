@@ -2,8 +2,8 @@
 
 [
     {
-        input: '',
-        output: ''
+        input: 'pwd',
+        output: '/home/name'
     }
 ]
 

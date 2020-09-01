@@ -1,8 +1,6 @@
 /*
 
-{
-    currentPath: '/'
-}
+'/home/name/dir1'
 
 */
 

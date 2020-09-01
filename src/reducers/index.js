@@ -8,7 +8,6 @@ import toggleWinowReducer from './showWindowReducer'
 export default combineReducers({
     inputValue: inputValueReducer,
     contentHistory: contentHistoryReducer,
-    // files represents all the files and directories
     files: filesReducer,
     filePath: filePathReducer,
     window: toggleWinowReducer

@@ -1,3 +1,9 @@
+/*
+
+'terminal'
+
+*/
+
 export default (state = 'help', action) => {
     switch (action.type) {
         case 'SHOW_WINDOW':

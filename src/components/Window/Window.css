@@ -1,5 +1,4 @@
 .window {
-    /*width: 700px;*/
     color: #fff;
     font-family: 'Ubuntu-Medium';
     box-shadow: 0 1rem 2rem rgba(0,0,0, 0.2);
@@ -7,12 +6,6 @@
     top: 20%;
     left: 30%;
 
-    /* new
-    resize: both;
-    overflow: hidden;
-    min-width: 400px;
-    min-height: 200px;
-    new */
     resize: both;
     overflow: hidden;
     min-width: 400px;

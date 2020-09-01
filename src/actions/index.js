@@ -1,4 +1,4 @@
-// input value action creator
+// changes input value in terminal
 export const changeInputValue = (value) => {
     return {
         type: 'CHANGE_INPUT_VALUE',
@@ -6,6 +6,7 @@ export const changeInputValue = (value) => {
     };
 };
 
+// update content history in terminal
 export const updateContentHistory = (input, output) => {
     return {
         type: 'UPDATE_CONTENT_HISTORY',
@@ -13,13 +14,14 @@ export const updateContentHistory = (input, output) => {
     };
 };
 
+// clear that already existing history
 export const clearContentHistory = () => {
     return {
         type: 'CLEAR_CONTENT_HISTORY'
     }
 }
 
-// files = directories/files
+// creates directories/files
 export const createFile = (name, path, type, color) => {
     return {
         type: 'CREATE_FILE',
@@ -27,6 +29,7 @@ export const createFile = (name, path, type, color) => {
     };
 };
 
+// removes file
 export const removeFile = (file) => {
     return {
         type: 'REMOVE_FILE',
@@ -34,6 +37,7 @@ export const removeFile = (file) => {
     };
 };
 
+// changes file
 export const changeFile = (from, to) => {
     return {
         type: 'CHANGE_FILE',
@@ -41,6 +45,7 @@ export const changeFile = (from, to) => {
     }
 }
 
+// changes file path
 export const changeFilePath = (path) => {
     return {
         type: 'CHANGE_FILE_PATH',
@@ -48,6 +53,7 @@ export const changeFilePath = (path) => {
     }
 }
 
+// shows different window
 export const showWindow = (window) => {
     return {
         type: 'SHOW_WINDOW',
